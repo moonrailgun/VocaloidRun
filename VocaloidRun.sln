@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VocaloidRun.CSharp", "VocaloidRun.CSharp.csproj", "{F514EE57-A33E-A8B2-0A87-D3ADA448D850}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VocaloidRun.CSharp.Editor", "VocaloidRun.CSharp.Editor.csproj", "{8D4AE1C1-AC5D-4ADC-D530-447DE6BEB495}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F514EE57-A33E-A8B2-0A87-D3ADA448D850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F514EE57-A33E-A8B2-0A87-D3ADA448D850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F514EE57-A33E-A8B2-0A87-D3ADA448D850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F514EE57-A33E-A8B2-0A87-D3ADA448D850}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D4AE1C1-AC5D-4ADC-D530-447DE6BEB495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D4AE1C1-AC5D-4ADC-D530-447DE6BEB495}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D4AE1C1-AC5D-4ADC-D530-447DE6BEB495}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D4AE1C1-AC5D-4ADC-D530-447DE6BEB495}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
