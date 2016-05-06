@@ -86,6 +86,7 @@
     <Compile Include="Assets\Endless Run\Scripts\Shop\ShopCharacter.cs" />
     <Compile Include="Assets\Endless Run\Scripts\Title\ControlScene.cs" />
     <Compile Include="Assets\Endless Run\Scripts\Title\TitleCharacter.cs" />
+    <Compile Include="Assets\Scripts\Game\GlobalDefine.cs" />
     <Compile Include="Assets\Scripts\SceneManager\GameScene.cs" />
     <Compile Include="Assets\Scripts\SceneManager\IndexScene.cs" />
     <Compile Include="Assets\Scripts\UI\AlphaText.cs" />
