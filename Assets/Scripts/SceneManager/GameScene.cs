@@ -11,6 +11,8 @@ public class GameScene : MonoBehaviour {
     public GameObject pauseButton;
     public GameObject pausePanel;
 
+    public bool isPause = false;
+
 	// Use this for initialization
 	void Start () {
         Debug.Log("游戏开始");
