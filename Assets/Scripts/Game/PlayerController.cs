@@ -42,23 +42,47 @@ public class PlayerController : MonoBehaviour
     {
         instance = this;
         this.scene = GameObject.Find("Main Camera").GetComponent<GameScene>();
+        StartCoroutine(UpdateAction());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (scene != null && scene.currentLife > 0 && scene.isPause == false)
+    }
+
+    IEnumerator UpdateAction()
+    {
+        while (scene != null && scene.currentLife > 0)
         {
-            if (enableKeyInput)
+            if (scene.isPause == false)
             {
-                KeyInput();
+                if (enableKeyInput)
+                {
+                    KeyInput();
+                }
+
+                if (enableTouchInput)
+                {
+                    TouchInput();
+                }
+
+                CheckLane();
+                MoveForward();
+            }
+            else
+            {
+                Debug.LogWarning("游戏暂停 未处理");
             }
 
-            if (enableTouchInput)
-            {
-                TouchInput();
-            }
+            yield return 0;
         }
+
+        StartCoroutine(MoveBack());
+        Debug.LogWarning("玩家死亡 未处理");
+
+        yield return new WaitForSeconds(2.0f);
+
+        Debug.Log("重启游戏");
     }
 
     void KeyInput()
@@ -219,5 +243,36 @@ public class PlayerController : MonoBehaviour
             directInput = DirectionInput.Null;
             activeInput = false;
         }
+    }
+
+    void CheckLane()
+    {
+
+    }
+    //向前移动
+    void MoveForward()
+    {
+        if (scene != null)
+        {
+            float speedMove = scene.currentSpeed;
+            //todo
+        }
+    }
+
+    IEnumerator MoveBack()
+    {
+        float z = transform.position.z - 0.5f;
+        bool complete = false;
+        while (complete == false)
+        {
+            transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, z), 2 * Time.deltaTime);
+            if ((transform.position.z - z) < 0.05f)
+            {
+                complete = true;
+            }
+            yield return 0;
+        }
+
+        yield return 0;
     }
 }
