@@ -22,8 +22,8 @@ public class GameScene : MonoBehaviour {
 
         LoadPlayer();
 
-        GlobalDefine.SetImageColorAlpha(this.pausePanel.GetComponent<Image>(), 0);
-        GlobalDefine.SetImageColorAlpha(this.pauseButton.GetComponent<Image>(), 255);
+        this.pausePanel.SetActive(false);
+        this.pauseButton.SetActive(true);
 	}
 	
 	// Update is called once per frame
@@ -40,7 +40,7 @@ public class GameScene : MonoBehaviour {
     {
         Debug.Log("暂停游戏");
 
-        GlobalDefine.SetImageColorAlpha(this.pausePanel.GetComponent<Image>(), 255);
-        GlobalDefine.SetImageColorAlpha(this.pauseButton.GetComponent<Image>(), 0);
+        this.pausePanel.SetActive(true);
+        this.pauseButton.SetActive(false);
     }
 }

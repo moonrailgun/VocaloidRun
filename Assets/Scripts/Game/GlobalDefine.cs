@@ -16,4 +16,16 @@ public static class GlobalDefine
         color.a = a;
         image.color = color;
     }
+    public static void SetAllImageColorAlpha(GameObject obj, float a)
+    {
+        //self
+        SetImageColorAlpha(obj.GetComponent<Image>(), a);
+
+        //child
+        Image[] images = obj.GetComponentsInChildren<Image>();
+        foreach (Image img in images)
+        {
+            SetImageColorAlpha(img, a);
+        }
+    }
 }
