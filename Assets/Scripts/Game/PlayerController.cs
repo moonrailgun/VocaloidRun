@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public bool enableKeyInput = true;
     public bool enableTouchInput = true;
 
+    public CharacterController characterController;
+
     //玩家状态
     public bool isRoll;//翻滚
     public bool isDoubleJump;//二段跳
@@ -26,7 +28,8 @@ public class PlayerController : MonoBehaviour
 
     private GameScene scene;
 
-    public static PlayerController instance;//单例
+
+    //public static PlayerController instance;//单例
 
     //触碰事件
     void OnTriggerEnter(Collider col)
@@ -40,7 +43,7 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        instance = this;
+        //instance = this;
         this.scene = GameObject.Find("Main Camera").GetComponent<GameScene>();
         StartCoroutine(UpdateAction());
     }

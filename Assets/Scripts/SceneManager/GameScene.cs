@@ -15,6 +15,7 @@ public class GameScene : MonoBehaviour {
     public GameObject[] playerPref;
 
     public bool isPause = false;
+    public bool isRoll = false;
     public int countAddSpeed;//速度增加次数
 
     private float distanceCheck = 0;
@@ -23,8 +24,6 @@ public class GameScene : MonoBehaviour {
 	void Start () {
         this.currentLife = GlobalDefine.startLife;
         this.currentSpeed = GlobalDefine.startSpeed;
-
-        LoadPlayer();
 
         this.pausePanel.SetActive(false);
         this.pauseButton.SetActive(true);
@@ -47,6 +46,7 @@ public class GameScene : MonoBehaviour {
     //加载玩家
     void LoadPlayer()
     {
+        Debug.Log("加载玩家");
         GameObject go = Instantiate<GameObject>(this.playerPref[0]);
         go.transform.position = new Vector3(0, 0, 0);
         StartCoroutine(UpdatePerDistance());
@@ -59,7 +59,7 @@ public class GameScene : MonoBehaviour {
         {
             if (this.isPause == false && this.currentLife > 0)
             {
-                currentDistance += currentSpeed * Time.deltaTime;//todo 可能不准确
+                currentDistance += currentSpeed * Time.deltaTime;
                 distanceCheck += currentSpeed * Time.deltaTime;
                 if (distanceCheck >= GlobalDefine.addSpeedEveryDistance)
                 {
