@@ -155,7 +155,6 @@ public class PatternManager : MonoBehaviour {
         {
             AddLeftBuilding(this.defaultPosBuilding_Left[i]);
         }
-        
 
         yield return 0;
     }
