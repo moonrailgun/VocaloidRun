@@ -3,10 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PatternManager : MonoBehaviour {
+    public enum BuildingPosition{
+        Left,Right
+    }
     public class BuildingSet
     {
-        public int[] stateBuilding_Left = new int[8];
-        public int[] stateBuilding_Right = new int[8];
+        public GameObject go;
+        public Vector3 pos;
+        public BuildingPosition dir;
     }
     public class ItemSet
     {
@@ -16,6 +20,9 @@ public class PatternManager : MonoBehaviour {
         public Vector2[] itemType_SubRight = new Vector2[31];
         public Vector2[] itemType_Right = new Vector2[31];
     }
+
+    //prefab
+    public List<GameObject> building_Pref = new List<GameObject>();
 
     [HideInInspector]
     public List<Vector3> defaultPosBuilding_Left = new List<Vector3>();
@@ -32,9 +39,7 @@ public class PatternManager : MonoBehaviour {
     [HideInInspector]
     public List<Vector3> defaultPosItem_Right = new List<Vector3>();
 
-    //prefab
-    public List<GameObject> building_Pref = new List<GameObject>();
-    public List<GameObject> item_Pref = new List<GameObject>();
+    
     //public GameObject spawnObj_Pref;
     //public GameObject floor_Pref;
 
@@ -48,32 +53,37 @@ public class PatternManager : MonoBehaviour {
     private List<GameObject> item_Obj = new List<GameObject>();
     private List<GameObject> floor_Obj = new List<GameObject>();
 
+
+    private Vector3 angleLeft = new Vector3(0, 180, 0);
+    private Vector3 angleRight = new Vector3(0, 0, 0);
+
 	// Use this for initialization
 	void Start () {
         SettingVariableFirst();
-        //StartCoroutine(CalAmountItem());
+        StartCoroutine(CalAmountBuilding());
 	}
 
+    //计算位置信息
     void SettingVariableFirst()
     {
         if (defaultPosBuilding_Left.Count <= 0)
         {
-            Vector3 pos = new Vector3(-3, 0, 12);
+            Vector3 pos = new Vector3(-3, 0, 0);
             for (int i = 0; i < 8; i++)
             {
-                defaultPosBuilding_Left.Add(new Vector3(pos.x, pos.y, pos.z - (i * 4)));
+                defaultPosBuilding_Left.Add(new Vector3(pos.x, pos.y, pos.z + (i * GlobalDefine.defaultBuildingInterval)));
             }
         }
 
         if (defaultPosBuilding_Right.Count <= 0)
         {
-            Vector3 pos = new Vector3(3, 0, 16);
+            Vector3 pos = new Vector3(3, 0, 0);
             for (int i = 0; i < 8; i++)
             {
-                defaultPosBuilding_Right.Add(new Vector3(pos.x, pos.y, pos.z - (i * 4)));
+                defaultPosBuilding_Right.Add(new Vector3(pos.x, pos.y, pos.z + (i * GlobalDefine.defaultBuildingInterval)));
             }
         }
-
+        /*
         if (defaultPosItem_Left.Count <= 0)
         {
             Vector3 pos = new Vector3(-1.8f, 0, 15);
@@ -126,13 +136,44 @@ public class PatternManager : MonoBehaviour {
         if (patternItem.Count <= 0)
         {
             patternItem.Add(new ItemSet());
-        }
+        }*/
     }
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+
+    IEnumerator CalAmountBuilding()
+    {
+        //配置
+        for (int i = 0; i < 8; i++)
+        {
+            AddRightBuilding(this.defaultPosBuilding_Right[i]);
+        }
+        for (int i = 0; i < 8; i++)
+        {
+            AddLeftBuilding(this.defaultPosBuilding_Left[i]);
+        }
+        
+
+        yield return 0;
+    }
+
+    GameObject AddRightBuilding(Vector3 pos)
+    {
+        GameObject go = GameObject.Instantiate<GameObject>(building_Pref[0]);
+        go.transform.position = pos;
+        go.transform.eulerAngles = angleRight;
+        return go;
+    }
+    GameObject AddLeftBuilding(Vector3 pos)
+    {
+        GameObject go = GameObject.Instantiate<GameObject>(building_Pref[0]);
+        go.transform.position = pos;
+        go.transform.eulerAngles = angleLeft;
+        return go;
+    }
 
     /*IEnumerator CalAmountItem()
     {
