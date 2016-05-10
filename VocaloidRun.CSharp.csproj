@@ -89,6 +89,7 @@
     <Compile Include="Assets\Endless Run\Scripts\Title\TitleCharacter.cs" />
     <Compile Include="Assets\Scripts\Game\AnimationManager.cs" />
     <Compile Include="Assets\Scripts\Game\GlobalDefine.cs" />
+    <Compile Include="Assets\Scripts\Game\PatternManager.cs" />
     <Compile Include="Assets\Scripts\Game\PlayerController.cs" />
     <Compile Include="Assets\Scripts\SceneManager\GameScene.cs" />
     <Compile Include="Assets\Scripts\SceneManager\IndexScene.cs" />
