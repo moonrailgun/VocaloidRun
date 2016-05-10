@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Endless Run\Scripts\Gameplay\AnimationManager5.cs" />
-    <Compile Include="Assets\Endless Run\Scripts\Gameplay\Building.cs" />
     <Compile Include="Assets\Endless Run\Scripts\Gameplay\CalOnGUI.cs" />
     <Compile Include="Assets\Endless Run\Scripts\Gameplay\CameraFollow.cs" />
     <Compile Include="Assets\Endless Run\Scripts\Gameplay\CoinRotation.cs" />
@@ -88,6 +87,7 @@
     <Compile Include="Assets\Endless Run\Scripts\Title\ControlScene.cs" />
     <Compile Include="Assets\Endless Run\Scripts\Title\TitleCharacter.cs" />
     <Compile Include="Assets\Scripts\Game\AnimationManager.cs" />
+    <Compile Include="Assets\Scripts\Game\Building.cs" />
     <Compile Include="Assets\Scripts\Game\GlobalDefine.cs" />
     <Compile Include="Assets\Scripts\Game\PatternManager.cs" />
     <Compile Include="Assets\Scripts\Game\PlayerController.cs" />
