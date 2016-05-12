@@ -1,20 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ColliderCheck : MonoBehaviour {
+public class ColliderCheck : MonoBehaviour
+{
     public bool isCollision = false;
 
     private GameObject player;
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    public GameObject headParent;
+    public string nameColliderHit;
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         if (player == null)
         {
-            player = GameObject.FindGameObjectWithTag("Player");
+            player = GameObject.FindGameObjectWithTag(nameColliderHit);
         }
         else
         {
@@ -23,5 +28,5 @@ public class ColliderCheck : MonoBehaviour {
                 isCollision = true;
             }
         }
-	}
+    }
 }

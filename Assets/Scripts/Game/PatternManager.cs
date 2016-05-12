@@ -40,7 +40,7 @@ public class PatternManager : MonoBehaviour {
     public List<Vector3> defaultPosItem_Right = new List<Vector3>();
 
     
-    //public GameObject spawnObj_Pref;
+    public GameObject spawnObj_Pref;
     //public GameObject floor_Pref;
 
     public List<BuildingSet> patternBuilding = new List<BuildingSet>();
@@ -53,6 +53,8 @@ public class PatternManager : MonoBehaviour {
     private List<GameObject> item_Obj = new List<GameObject>();
     private List<GameObject> floor_Obj = new List<GameObject>();
 
+    private GameObject spawnObj_Obj;//加载检测
+    private ColliderCheck colliderCheck;
 
     private Vector3 angleLeft = new Vector3(0, 180, 0);
     private Vector3 angleRight = new Vector3(0, 0, 0);
@@ -77,7 +79,7 @@ public class PatternManager : MonoBehaviour {
 
         if (defaultPosBuilding_Right.Count <= 0)
         {
-            Vector3 pos = new Vector3(3, 0, 0);
+            Vector3 pos = new Vector3(3, 0, 4);
             for (int i = 0; i < 8; i++)
             {
                 defaultPosBuilding_Right.Add(new Vector3(pos.x, pos.y, pos.z + (i * GlobalDefine.defaultBuildingInterval)));
@@ -156,6 +158,11 @@ public class PatternManager : MonoBehaviour {
             AddLeftBuilding(this.defaultPosBuilding_Left[i]);
         }
 
+        this.spawnObj_Obj = GameObject.Instantiate(this.spawnObj_Pref);
+        this.spawnObj_Obj.transform.position = new Vector3(0, 0, GlobalDefine.floorPosInterval);
+        this.colliderCheck = this.spawnObj_Obj.GetComponentInChildren<ColliderCheck>();
+        StartCoroutine(WaitCheckFloor());
+
         yield return 0;
     }
 
@@ -172,6 +179,38 @@ public class PatternManager : MonoBehaviour {
         go.transform.position = pos;
         go.transform.eulerAngles = angleLeft;
         return go;
+    }
+
+    //等待检测
+    IEnumerator WaitCheckFloor()
+    {
+        while (this.colliderCheck.isCollision == false)
+        {
+            Debug.Log("a");
+            yield return 0;
+        }
+        this.colliderCheck.isCollision = false;
+        StartCoroutine(AddFloor());
+
+        yield return 0;
+    }
+
+    //添加地块
+    IEnumerator AddFloor()
+    {
+        print("添加地块");
+        if (spawnObj_Obj != null)
+        {
+            Vector3 pos = Vector3.zero;
+            pos.z = this.spawnObj_Obj.transform.position.z + GlobalDefine.floorPosInterval;
+
+            //添加检测
+            this.spawnObj_Obj = GameObject.Instantiate(this.spawnObj_Pref);
+            this.spawnObj_Obj.transform.position = pos;
+            this.colliderCheck = this.spawnObj_Obj.GetComponent<ColliderCheck>();
+        }
+
+        yield return 0;
     }
 
     /*IEnumerator CalAmountItem()
