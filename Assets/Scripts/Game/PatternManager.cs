@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class PatternManager : MonoBehaviour {
-    public enum BuildingPosition{
-        Left,Right
+public class PatternManager : MonoBehaviour
+{
+    public enum BuildingPosition
+    {
+        Left, Right
     }
     public class BuildingSet
     {
@@ -39,9 +41,9 @@ public class PatternManager : MonoBehaviour {
     [HideInInspector]
     public List<Vector3> defaultPosItem_Right = new List<Vector3>();
 
-    
+
     public GameObject spawnObj_Pref;
-    //public GameObject floor_Pref;
+    public GameObject floor_Pref;
 
     public List<BuildingSet> patternBuilding = new List<BuildingSet>();
     public List<ItemSet> patternItem = new List<ItemSet>();
@@ -49,9 +51,9 @@ public class PatternManager : MonoBehaviour {
     public bool isLoadingComplete = false;
     public float loadingPercent = 0f;
 
-    private List<GameObject> building_Obj = new List<GameObject>();
-    private List<GameObject> item_Obj = new List<GameObject>();
-    private List<GameObject> floor_Obj = new List<GameObject>();
+    //private List<GameObject> buildingList = new List<GameObject>();
+    private List<GameObject> itemList = new List<GameObject>();
+    private List<GameObject> floorList = new List<GameObject>();
 
     private GameObject spawnObj_Obj;//加载检测
     private ColliderCheck colliderCheck;
@@ -59,11 +61,12 @@ public class PatternManager : MonoBehaviour {
     private Vector3 angleLeft = new Vector3(0, 180, 0);
     private Vector3 angleRight = new Vector3(0, 0, 0);
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         SettingVariableFirst();
         StartCoroutine(CalAmountBuilding());
-	}
+    }
 
     //计算位置信息
     void SettingVariableFirst()
@@ -140,11 +143,12 @@ public class PatternManager : MonoBehaviour {
             patternItem.Add(new ItemSet());
         }*/
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     IEnumerator CalAmountBuilding()
     {
@@ -186,7 +190,6 @@ public class PatternManager : MonoBehaviour {
     {
         while (this.colliderCheck.isCollision == false)
         {
-            Debug.Log("a");
             yield return 0;
         }
         this.colliderCheck.isCollision = false;
@@ -201,11 +204,30 @@ public class PatternManager : MonoBehaviour {
         print("添加地块");
         if (spawnObj_Obj != null)
         {
+            float startZPos = this.spawnObj_Obj.transform.position.z;
             Vector3 pos = Vector3.zero;
-            pos.z = this.spawnObj_Obj.transform.position.z + GlobalDefine.floorPosInterval;
+            pos.z = startZPos + GlobalDefine.floorPosInterval / 2;
+
+            //添加地块
+            GameObject floor = Instantiate<GameObject>(this.floor_Pref);
+            floor.transform.position = pos;
+            floorList.Add(floor);
+
+            //添加建筑
+            for (int i = 0; i < 8; i++)
+            {
+                //左
+                Vector3 leftBuildingPos = new Vector3(-3, 0, startZPos + GlobalDefine.defaultBuildingInterval * i);
+                AddLeftBuilding(leftBuildingPos);
+
+                //右
+                Vector3 rightBuildingPos = new Vector3(3, 0,4 + startZPos + GlobalDefine.defaultBuildingInterval * i);
+                AddRightBuilding(rightBuildingPos);
+            }
+
 
             //添加检测
-            this.spawnObj_Obj = GameObject.Instantiate(this.spawnObj_Pref);
+            this.spawnObj_Obj = Instantiate<GameObject>(this.spawnObj_Pref);
             this.spawnObj_Obj.transform.position = pos;
             this.colliderCheck = this.spawnObj_Obj.GetComponent<ColliderCheck>();
         }
