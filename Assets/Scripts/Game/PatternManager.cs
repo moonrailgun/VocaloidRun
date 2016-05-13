@@ -190,6 +190,7 @@ public class PatternManager : MonoBehaviour
     {
         while (this.colliderCheck.isCollision == false)
         {
+            Debug.Log("0");
             yield return 0;
         }
         this.colliderCheck.isCollision = false;
@@ -201,38 +202,54 @@ public class PatternManager : MonoBehaviour
     //添加地块
     IEnumerator AddFloor()
     {
-        print("添加地块");
+        print("添加区块");
         if (spawnObj_Obj != null)
         {
             float startZPos = this.spawnObj_Obj.transform.position.z;
-            Vector3 pos = Vector3.zero;
-            pos.z = startZPos + GlobalDefine.floorPosInterval / 2;
-
-            //添加地块
-            GameObject floor = Instantiate<GameObject>(this.floor_Pref);
-            floor.transform.position = pos;
-            floorList.Add(floor);
-
-            //添加建筑
-            for (int i = 0; i < 8; i++)
-            {
-                //左
-                Vector3 leftBuildingPos = new Vector3(-3, 0, startZPos + GlobalDefine.defaultBuildingInterval * i);
-                AddLeftBuilding(leftBuildingPos);
-
-                //右
-                Vector3 rightBuildingPos = new Vector3(3, 0,4 + startZPos + GlobalDefine.defaultBuildingInterval * i);
-                AddRightBuilding(rightBuildingPos);
-            }
-
-
-            //添加检测
-            this.spawnObj_Obj = Instantiate<GameObject>(this.spawnObj_Pref);
-            this.spawnObj_Obj.transform.position = pos;
-            this.colliderCheck = this.spawnObj_Obj.GetComponent<ColliderCheck>();
+            AddRegion(startZPos);
         }
 
+        //添加完毕重新检测
+        //StartCoroutine(WaitCheckFloor());
+
         yield return 0;
+    }
+
+    //设置初始化场景
+    void InitScene()
+    {
+
+    }
+
+    //添加区块
+    void AddRegion(float startZPos)
+    {
+        Vector3 pos = Vector3.zero;
+        pos.z = startZPos + GlobalDefine.floorPosInterval / 2;
+
+        //添加地块
+        GameObject floor = Instantiate<GameObject>(this.floor_Pref);
+        floor.transform.position = pos;
+        floorList.Add(floor);
+
+        //添加建筑
+        for (int i = 0; i < 8; i++)
+        {
+            //左
+            Vector3 leftBuildingPos = new Vector3(-3, 0, startZPos + GlobalDefine.defaultBuildingInterval * i);
+            GameObject leftBuilding = AddLeftBuilding(leftBuildingPos);
+            leftBuilding.transform.parent = floor.transform;
+
+            //右
+            Vector3 rightBuildingPos = new Vector3(3, 0, 4 + startZPos + GlobalDefine.defaultBuildingInterval * i);
+            GameObject rightBuilding = AddRightBuilding(rightBuildingPos);
+            rightBuilding.transform.parent = floor.transform;
+        }
+
+        //添加检测
+        this.spawnObj_Obj = Instantiate<GameObject>(this.spawnObj_Pref);
+        this.spawnObj_Obj.transform.position = pos;
+        this.colliderCheck = this.spawnObj_Obj.GetComponent<ColliderCheck>();
     }
 
     /*IEnumerator CalAmountItem()

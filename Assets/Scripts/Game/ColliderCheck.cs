@@ -6,7 +6,7 @@ public class ColliderCheck : MonoBehaviour
     public bool isCollision = false;
 
     private GameObject player;
-    public GameObject headParent;
+    //public GameObject headParent;
     public string nameColliderHit;
     // Use this for initialization
     void Start()
