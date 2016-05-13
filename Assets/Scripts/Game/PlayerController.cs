@@ -258,7 +258,7 @@ public class PlayerController : MonoBehaviour
         if (scene != null)
         {
             float speedMove = scene.currentSpeed;
-            //todo
+            this.transform.position += new Vector3(0,0, speedMove * Time.deltaTime);
         }
     }
 

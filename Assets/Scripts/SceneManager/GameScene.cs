@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class GameScene : MonoBehaviour {
     public float currentSpeed;
-    public float currentLife;
+    public float currentLife = 1;
     public float currentDistance = 0;
 
     public GameObject player;
@@ -25,8 +25,8 @@ public class GameScene : MonoBehaviour {
         this.currentLife = GlobalDefine.startLife;
         this.currentSpeed = GlobalDefine.startSpeed;
 
-        this.pausePanel.SetActive(false);
-        this.pauseButton.SetActive(true);
+        //this.pausePanel.SetActive(false);
+        //this.pauseButton.SetActive(true);
 
         GameStart();
 	}
@@ -47,8 +47,11 @@ public class GameScene : MonoBehaviour {
     void LoadPlayer()
     {
         Debug.Log("加载玩家");
-        GameObject go = Instantiate<GameObject>(this.playerPref[0]);
-        go.transform.position = new Vector3(0, 0, 0);
+        GameObject player = Instantiate<GameObject>(this.playerPref[0]);
+        player.transform.position = new Vector3(0, 0, 0);
+
+        GameObject.Find("Main Camera").GetComponent<CameraFollow>().target = player.transform;
+
         StartCoroutine(UpdatePerDistance());
     }
 
