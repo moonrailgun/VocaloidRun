@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class PatternManager : MonoBehaviour
 {
+    static public int beforehandFloorNum = 3;//玩家面前视野预留的地块数量
+
     public enum BuildingPosition
     {
         Left, Right
@@ -154,8 +156,20 @@ public class PatternManager : MonoBehaviour
         print("添加区块");
         if (currentSpawnObj != null)
         {
-            float startZPos = this.currentSpawnObj.transform.position.z + GlobalDefine.floorPosInterval * 2;
+            float startZPos = this.currentSpawnObj.transform.position.z + GlobalDefine.floorPosInterval * (beforehandFloorNum - 1);
             AddRegion(startZPos);
+
+            //销毁之前的区块。销毁刚走过区块的前一块
+            if (this.spawnObjList.Count >= beforehandFloorNum + 2)
+            {
+                Destroy(this.spawnObjList[0], 1.0f);
+                this.spawnObjList.RemoveAt(0);
+            }
+            if (this.regionList.Count >= beforehandFloorNum + 2)
+            {
+                Destroy(this.regionList[0], 1.0f);
+                this.regionList.RemoveAt(0);
+            }
         }
 
         //添加完毕重新检测
@@ -167,9 +181,12 @@ public class PatternManager : MonoBehaviour
     //设置初始化场景
     void InitScene()
     {
-        AddRegion(0);
-        AddRegion(GlobalDefine.floorPosInterval * 1);
-        AddRegion(GlobalDefine.floorPosInterval * 2);//初始化三个区块作为初始场景
+        //初始化区块作为初始场景
+        for (int i = 0; i < beforehandFloorNum; i++)
+        {
+            AddRegion(GlobalDefine.floorPosInterval * i);
+        }
+
         StartCoroutine(WaitCheckFloor());//开启等待检测
     }
 
@@ -204,13 +221,11 @@ public class PatternManager : MonoBehaviour
         this.spawnObjList.Add(spawnObj);
 
         //配置当前检测
-        if (this.spawnObjList.Count >= 3)
+        if (this.spawnObjList.Count >= beforehandFloorNum)
         {
-            this.currentSpawnObj = this.spawnObjList[spawnObjList.Count - 3];//为倒数第二个进行检测
+            this.currentSpawnObj = this.spawnObjList[spawnObjList.Count - beforehandFloorNum];//为倒数第三个进行检测
             this.currentColliderCheck = this.currentSpawnObj.GetComponentInChildren<ColliderCheck>();
         }
-
-        //TODO 销毁之前的区块
     }
 
     /*IEnumerator CalAmountItem()
