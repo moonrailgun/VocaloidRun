@@ -190,7 +190,6 @@ public class PatternManager : MonoBehaviour
     {
         while (this.colliderCheck.isCollision == false)
         {
-            Debug.Log("0");
             yield return 0;
         }
         this.colliderCheck.isCollision = false;
@@ -210,7 +209,7 @@ public class PatternManager : MonoBehaviour
         }
 
         //添加完毕重新检测
-        //StartCoroutine(WaitCheckFloor());
+        StartCoroutine(WaitCheckFloor());
 
         yield return 0;
     }
@@ -248,8 +247,8 @@ public class PatternManager : MonoBehaviour
 
         //添加检测
         this.spawnObj_Obj = Instantiate<GameObject>(this.spawnObj_Pref);
-        this.spawnObj_Obj.transform.position = pos;
-        this.colliderCheck = this.spawnObj_Obj.GetComponent<ColliderCheck>();
+        this.spawnObj_Obj.transform.position = pos + new Vector3(0,0,GlobalDefine.floorPosInterval / 2);
+        this.colliderCheck = this.spawnObj_Obj.GetComponentInChildren<ColliderCheck>();
     }
 
     /*IEnumerator CalAmountItem()
