@@ -48,15 +48,18 @@ public class PatternManager : MonoBehaviour
     public List<BuildingSet> patternBuilding = new List<BuildingSet>();
     public List<ItemSet> patternItem = new List<ItemSet>();
 
+    public List<GameObject> regionList = new List<GameObject>();//区域队列
+    public List<GameObject> spawnObjList = new List<GameObject>();//生成区块检测队列
+    private GameObject currentSpawnObj;//加载检测
+
     public bool isLoadingComplete = false;
     public float loadingPercent = 0f;
 
     //private List<GameObject> buildingList = new List<GameObject>();
     private List<GameObject> itemList = new List<GameObject>();
-    private List<GameObject> floorList = new List<GameObject>();
 
-    private GameObject spawnObj_Obj;//加载检测
-    private ColliderCheck colliderCheck;
+
+    private ColliderCheck currentColliderCheck;
 
     private Vector3 angleLeft = new Vector3(0, 180, 0);
     private Vector3 angleRight = new Vector3(0, 0, 0);
@@ -65,7 +68,8 @@ public class PatternManager : MonoBehaviour
     void Start()
     {
         SettingVariableFirst();
-        StartCoroutine(CalAmountBuilding());
+        InitScene();
+        //StartCoroutine(CalAmountBuilding());
     }
 
     //计算位置信息
@@ -88,60 +92,6 @@ public class PatternManager : MonoBehaviour
                 defaultPosBuilding_Right.Add(new Vector3(pos.x, pos.y, pos.z + (i * GlobalDefine.defaultBuildingInterval)));
             }
         }
-        /*
-        if (defaultPosItem_Left.Count <= 0)
-        {
-            Vector3 pos = new Vector3(-1.8f, 0, 15);
-            for (int i = 0; i < 31; i++)
-            {
-                defaultPosItem_Left.Add(new Vector3(pos.x, pos.y, pos.z - i));
-            }
-        }
-
-        if (defaultPosItem_SubLeft.Count <= 0)
-        {
-            Vector3 pos = new Vector3(-0.9f, 0, 15);
-            for (int i = 0; i < 31; i++)
-            {
-                defaultPosItem_SubLeft.Add(new Vector3(pos.x, pos.y, pos.z - i));
-            }
-        }
-
-        if (defaultPosItem_Middle.Count <= 0)
-        {
-            Vector3 pos = new Vector3(0, 0, 15);
-            for (int i = 0; i < 31; i++)
-            {
-                defaultPosItem_Middle.Add(new Vector3(pos.x, pos.y, pos.z - i));
-            }
-        }
-
-        if (defaultPosItem_SubRight.Count <= 0)
-        {
-            Vector3 pos = new Vector3(0.9f, 0, 15);
-            for (int i = 0; i < 31; i++)
-            {
-                defaultPosItem_SubRight.Add(new Vector3(pos.x, pos.y, pos.z - i));
-            }
-        }
-
-        if (defaultPosItem_Right.Count <= 0)
-        {
-            Vector3 pos = new Vector3(1.8f, 0, 15);
-            for (int i = 0; i < 31; i++)
-            {
-                defaultPosItem_Right.Add(new Vector3(pos.x, pos.y, pos.z - i));
-            }
-        }
-
-        if (patternBuilding.Count <= 0)
-        {
-            patternBuilding.Add(new BuildingSet());
-        }
-        if (patternItem.Count <= 0)
-        {
-            patternItem.Add(new ItemSet());
-        }*/
     }
 
     // Update is called once per frame
@@ -162,9 +112,9 @@ public class PatternManager : MonoBehaviour
             AddLeftBuilding(this.defaultPosBuilding_Left[i]);
         }
 
-        this.spawnObj_Obj = GameObject.Instantiate(this.spawnObj_Pref);
-        this.spawnObj_Obj.transform.position = new Vector3(0, 0, GlobalDefine.floorPosInterval);
-        this.colliderCheck = this.spawnObj_Obj.GetComponentInChildren<ColliderCheck>();
+        this.currentSpawnObj = GameObject.Instantiate(this.spawnObj_Pref);
+        this.currentSpawnObj.transform.position = new Vector3(0, 0, GlobalDefine.floorPosInterval);
+        this.currentColliderCheck = this.currentSpawnObj.GetComponentInChildren<ColliderCheck>();
         StartCoroutine(WaitCheckFloor());
 
         yield return 0;
@@ -188,11 +138,11 @@ public class PatternManager : MonoBehaviour
     //等待检测
     IEnumerator WaitCheckFloor()
     {
-        while (this.colliderCheck.isCollision == false)
+        while (this.currentColliderCheck.isCollision == false)
         {
             yield return 0;
         }
-        this.colliderCheck.isCollision = false;
+        this.currentColliderCheck.isCollision = false;
         StartCoroutine(AddFloor());
 
         yield return 0;
@@ -202,9 +152,9 @@ public class PatternManager : MonoBehaviour
     IEnumerator AddFloor()
     {
         print("添加区块");
-        if (spawnObj_Obj != null)
+        if (currentSpawnObj != null)
         {
-            float startZPos = this.spawnObj_Obj.transform.position.z;
+            float startZPos = this.currentSpawnObj.transform.position.z + GlobalDefine.floorPosInterval * 2;
             AddRegion(startZPos);
         }
 
@@ -217,7 +167,10 @@ public class PatternManager : MonoBehaviour
     //设置初始化场景
     void InitScene()
     {
-
+        AddRegion(0);
+        AddRegion(GlobalDefine.floorPosInterval * 1);
+        AddRegion(GlobalDefine.floorPosInterval * 2);//初始化三个区块作为初始场景
+        StartCoroutine(WaitCheckFloor());//开启等待检测
     }
 
     //添加区块
@@ -229,7 +182,7 @@ public class PatternManager : MonoBehaviour
         //添加地块
         GameObject floor = Instantiate<GameObject>(this.floor_Pref);
         floor.transform.position = pos;
-        floorList.Add(floor);
+        this.regionList.Add(floor);
 
         //添加建筑
         for (int i = 0; i < 8; i++)
@@ -246,9 +199,18 @@ public class PatternManager : MonoBehaviour
         }
 
         //添加检测
-        this.spawnObj_Obj = Instantiate<GameObject>(this.spawnObj_Pref);
-        this.spawnObj_Obj.transform.position = pos + new Vector3(0,0,GlobalDefine.floorPosInterval / 2);
-        this.colliderCheck = this.spawnObj_Obj.GetComponentInChildren<ColliderCheck>();
+        GameObject spawnObj = Instantiate<GameObject>(this.spawnObj_Pref);
+        spawnObj.transform.position = pos + new Vector3(0, 0, GlobalDefine.floorPosInterval / 2);
+        this.spawnObjList.Add(spawnObj);
+
+        //配置当前检测
+        if (this.spawnObjList.Count >= 3)
+        {
+            this.currentSpawnObj = this.spawnObjList[spawnObjList.Count - 3];//为倒数第二个进行检测
+            this.currentColliderCheck = this.currentSpawnObj.GetComponentInChildren<ColliderCheck>();
+        }
+
+        //TODO 销毁之前的区块
     }
 
     /*IEnumerator CalAmountItem()
