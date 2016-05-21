@@ -9,6 +9,7 @@ public static class GlobalDefine
     public static float maxSpeed = 20;//最大速度
     public static float addedSpeed = 0.5f;//每次增加的速度
     public static float addSpeedEveryDistance = 100;//每多少距离增加一次速度
+    public static float defaultJumpValue = 6f;//默认起跳高度
 
     public static float floorPosInterval = 32;//地块间隔距离
     public static float defaultBuildingInterval = 4;//建筑间隔距离(z轴向)

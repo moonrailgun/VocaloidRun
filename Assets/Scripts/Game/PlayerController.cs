@@ -16,17 +16,21 @@ public class PlayerController : MonoBehaviour
     public bool enableTouchInput = true;
 
     public CharacterController characterController;
+    public AnimationManager animationManager;
 
     //玩家状态
     public bool isRoll;//翻滚
-    public bool isDoubleJump;//二段跳
+    public bool isDoubleJump;//是否是二段跳阶段
 
-    public float gravity = 10;
+    public float gravity = 10;//重力系数
+    private float jumpValue;//起跳高度
 
     private Vector3 currentPos;//玩家当前位置
 
     private bool activeInput;
     private DirectionInput directInput;
+
+    private Vector3 moveDir;//玩家局部移动方向
 
     private GameScene scene;
 
@@ -46,13 +50,10 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //instance = this;
+        jumpValue = GlobalDefine.defaultJumpValue;
+
         this.scene = GameObject.Find("Main Camera").GetComponent<GameScene>();
         StartCoroutine(UpdateAction());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 
     IEnumerator UpdateAction()
@@ -255,21 +256,20 @@ public class PlayerController : MonoBehaviour
     {
         
     }
-    //向前移动
+    //向前移动并检测跳跃与翻滚
     void MoveForward()
     {
         if (scene != null)
         {
             float speedMove = scene.currentSpeed;
 
-            Vector3 moveDir = Vector3.zero;
             if (characterController.isGrounded)
             {
-                moveDir = Vector3.zero;
+                moveDir = Vector3.zero;//在地面则清零防止重力无限叠加过大
                 if (directInput == DirectionInput.Up)
                 {
                     Debug.Log("跳跃");
-                    //Jump();
+                    Jump();
                     if (isDoubleJump)
                     {
                         isDoubleJump = false;
@@ -299,7 +299,6 @@ public class PlayerController : MonoBehaviour
             moveDir.z = 0;
             moveDir += this.transform.TransformDirection(Vector3.forward * speedMove);
             moveDir.y -= gravity * Time.deltaTime;
-
             CheckSideCollision();
             characterController.Move((moveDir) * Time.deltaTime);
         }
@@ -308,6 +307,13 @@ public class PlayerController : MonoBehaviour
     private void CheckSideCollision()
     {
 
+    }
+
+    //跳跃
+    private void Jump()
+    {
+        animationManager.animationState = animationManager.Jump;
+        moveDir.y += jumpValue;
     }
 
     IEnumerator MoveBack()
@@ -326,4 +332,6 @@ public class PlayerController : MonoBehaviour
 
         yield return 0;
     }
+
+
 }
