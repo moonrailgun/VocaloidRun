@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     public bool isRoll;//翻滚
     public bool isDoubleJump;//二段跳
 
+    public float gravity = 10;
+
     private Vector3 currentPos;//玩家当前位置
 
     private bool activeInput;
@@ -248,9 +250,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //检测左右移动
     void CheckLane()
     {
-
+        
     }
     //向前移动
     void MoveForward()
@@ -258,8 +261,53 @@ public class PlayerController : MonoBehaviour
         if (scene != null)
         {
             float speedMove = scene.currentSpeed;
-            this.transform.position += new Vector3(0,0, speedMove * Time.deltaTime);
+
+            Vector3 moveDir = Vector3.zero;
+            if (characterController.isGrounded)
+            {
+                moveDir = Vector3.zero;
+                if (directInput == DirectionInput.Up)
+                {
+                    Debug.Log("跳跃");
+                    //Jump();
+                    if (isDoubleJump)
+                    {
+                        isDoubleJump = false;
+                    }
+                }
+                else if (directInput == DirectionInput.Down)
+                {
+                    Debug.Log("滚动");
+                }
+            }
+            else
+            {
+                if (directInput == DirectionInput.Down)
+                {
+                    Debug.Log("空中 - 下");
+                }
+                if (directInput == DirectionInput.Up)
+                {
+                    Debug.Log("空中 - 上");
+                    if (!isDoubleJump)
+                    {
+                        Debug.Log("二段跳");
+                    }
+                }
+            }
+
+            moveDir.z = 0;
+            moveDir += this.transform.TransformDirection(Vector3.forward * speedMove);
+            moveDir.y -= gravity * Time.deltaTime;
+
+            CheckSideCollision();
+            characterController.Move((moveDir) * Time.deltaTime);
         }
+    }
+
+    private void CheckSideCollision()
+    {
+
     }
 
     IEnumerator MoveBack()
