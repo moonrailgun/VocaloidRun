@@ -25,7 +25,9 @@ public class PlayerController : MonoBehaviour
     public float gravity = 10;//重力系数
     private float jumpValue;//起跳高度
 
-    private Vector3 currentPos;//玩家当前位置
+    private Vector3 currentPos;//鼠标当前位置
+
+    private Position playerPos = Position.Middle;//相对中间的位置
 
     private bool activeInput;
     private DirectionInput directInput;
@@ -254,7 +256,15 @@ public class PlayerController : MonoBehaviour
     //检测左右移动
     void CheckLane()
     {
-        
+        if (directInput == DirectionInput.Left)
+        {
+            SwitchRoad(Position.Left);
+        }
+        else if (directInput == DirectionInput.Right)
+        {
+            SwitchRoad(Position.Right);
+        }
+
     }
     //向前移动并检测跳跃与翻滚
     void MoveForward()
@@ -316,6 +326,31 @@ public class PlayerController : MonoBehaviour
         moveDir.y += jumpValue;
     }
 
+    //切换道路
+    private void SwitchRoad(Position pos)
+    {
+        if (playerPos == Position.Middle)
+        {
+            playerPos = pos;
+            if(pos == Position.Right){
+                this.transform.Translate(1.5f, 0, 0);
+            }else if(pos == Position.Left){
+                this.transform.Translate(-1.5f, 0, 0);
+            }
+        }else if(playerPos == Position.Left){
+            if (pos == Position.Middle || pos == Position.Right)
+            {
+                playerPos = Position.Middle;
+                this.transform.Translate(1.5f, 0, 0);
+            }
+        }else if(playerPos == Position.Right){
+            if(pos == Position.Middle || pos == Position.Left){
+                playerPos = Position.Middle;
+                this.transform.Translate(-1.5f, 0, 0);
+            }
+        }
+    }
+
     IEnumerator MoveBack()
     {
         float z = transform.position.z - 0.5f;
@@ -332,6 +367,4 @@ public class PlayerController : MonoBehaviour
 
         yield return 0;
     }
-
-
 }
