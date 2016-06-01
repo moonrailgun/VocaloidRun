@@ -258,13 +258,51 @@ public class PlayerController : MonoBehaviour
     {
         if (directInput == DirectionInput.Left)
         {
-            SwitchRoad(Position.Left);
+            SwitchTrack(Position.Left);
         }
         else if (directInput == DirectionInput.Right)
         {
-            SwitchRoad(Position.Right);
+            SwitchTrack(Position.Right);
         }
 
+        if (playerPos == Position.Middle)
+        {
+            if(transform.position.x > 0.05f){
+				moveDir = Vector3.Lerp(moveDir, Vector3.left*6, Time.deltaTime * 500);
+			}else if(transform.position.x < -0.05f){
+				moveDir = Vector3.Lerp(moveDir, Vector3.right*6, Time.deltaTime * 500);
+			}else{
+				moveDir.x = 0;
+				//checkSideCollision = false;
+				transform.position = Vector3.Lerp(transform.position, new Vector3(0,transform.position.y,transform.position.z), 6 * Time.deltaTime);
+			}
+        }
+        else if (playerPos == Position.Left)
+        {
+            if (transform.position.x > -1.8f)
+            {
+                moveDir = Vector3.Lerp(moveDir, Vector3.left * 6, Time.deltaTime * 500);
+            }
+            else
+            {
+                moveDir.x = 0;
+                //checkSideCollision = false;
+                transform.position = Vector3.Lerp(transform.position, new Vector3(-1.8f, transform.position.y, transform.position.z), 6 * Time.deltaTime);
+            }
+        }
+        else if (playerPos == Position.Right)
+        {
+            if (transform.position.x < 1.8f)
+            {
+                moveDir = Vector3.Lerp(moveDir, Vector3.right * 6, Time.deltaTime * 500);
+            }
+            else
+            {
+                moveDir.x = 0;
+                //checkSideCollision = false;
+                transform.position = Vector3.Lerp(transform.position, new Vector3(1.8f, transform.position.y, transform.position.z), 6 * Time.deltaTime);
+            }
+        }
     }
     //向前移动并检测跳跃与翻滚
     void MoveForward()
@@ -275,7 +313,8 @@ public class PlayerController : MonoBehaviour
 
             if (characterController.isGrounded)
             {
-                moveDir = Vector3.zero;//在地面则清零防止重力无限叠加过大
+                moveDir.y = 0;
+                //moveDir = Vector3.zero;//在地面则清零防止重力无限叠加过大
                 if (directInput == DirectionInput.Up)
                 {
                     Debug.Log("跳跃");
@@ -327,26 +366,26 @@ public class PlayerController : MonoBehaviour
     }
 
     //切换道路
-    private void SwitchRoad(Position pos)
+    private void SwitchTrack(Position pos)
     {
         if (playerPos == Position.Middle)
         {
             playerPos = pos;
             if(pos == Position.Right){
-                this.transform.Translate(1.5f, 0, 0);
+                //this.transform.Translate(1.5f, 0, 0);
             }else if(pos == Position.Left){
-                this.transform.Translate(-1.5f, 0, 0);
+                //this.transform.Translate(-1.5f, 0, 0);
             }
         }else if(playerPos == Position.Left){
             if (pos == Position.Middle || pos == Position.Right)
             {
                 playerPos = Position.Middle;
-                this.transform.Translate(1.5f, 0, 0);
+                //this.transform.Translate(1.5f, 0, 0);
             }
         }else if(playerPos == Position.Right){
-            if(pos == Position.Middle || pos == Position.Left){
+            if(pos == Position.Middle || pos == Position.Left) {
                 playerPos = Position.Middle;
-                this.transform.Translate(-1.5f, 0, 0);
+                //this.transform.Translate(-1.5f, 0, 0);
             }
         }
     }
