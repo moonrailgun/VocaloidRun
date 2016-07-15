@@ -334,6 +334,7 @@ public class PlayerController : MonoBehaviour
                 if (directInput == DirectionInput.Down)
                 {
                     Debug.Log("空中 - 下");
+                    QuickDown();
                 }
                 if (directInput == DirectionInput.Up)
                 {
@@ -356,6 +357,12 @@ public class PlayerController : MonoBehaviour
     private void CheckSideCollision()
     {
 
+    }
+
+    //快速下落
+    private void QuickDown()
+    {
+        moveDir.y -= jumpValue * 3;
     }
 
     //跳跃
