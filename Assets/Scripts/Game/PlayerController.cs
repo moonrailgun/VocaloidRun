@@ -342,6 +342,8 @@ public class PlayerController : MonoBehaviour
                     if (!isDoubleJump)
                     {
                         Debug.Log("二段跳");
+                        isDoubleJump = true;
+                        JumpSecond();
                     }
                 }
             }
@@ -370,6 +372,12 @@ public class PlayerController : MonoBehaviour
     {
         animationManager.animationState = animationManager.Jump;
         moveDir.y += jumpValue;
+    }
+
+    //二段跳
+    private void JumpSecond()
+    {
+        moveDir.y += jumpValue * 1.15f;
     }
 
     //切换道路
