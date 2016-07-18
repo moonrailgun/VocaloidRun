@@ -89,6 +89,7 @@
     <Compile Include="Assets\Scripts\Game\Building.cs" />
     <Compile Include="Assets\Scripts\Game\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Game\ColliderCheck.cs" />
+    <Compile Include="Assets\Scripts\Game\GameItem.cs" />
     <Compile Include="Assets\Scripts\Game\GlobalDefine.cs" />
     <Compile Include="Assets\Scripts\Game\PatternManager.cs" />
     <Compile Include="Assets\Scripts\Game\PlayerController.cs" />

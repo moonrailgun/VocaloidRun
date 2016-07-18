@@ -228,6 +228,14 @@ public class PatternManager : MonoBehaviour
         }
     }
 
+    void AddItem(Vector3 pos)
+    {
+        print("添加物品");
+
+
+
+    }
+
     /*IEnumerator CalAmountItem()
     {
         
