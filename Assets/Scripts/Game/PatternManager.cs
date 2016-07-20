@@ -46,6 +46,7 @@ public class PatternManager : MonoBehaviour
 
     public GameObject spawnObj_Pref;
     public GameObject floor_Pref;
+    public GameObject coin_Pref;
 
     public List<BuildingSet> patternBuilding = new List<BuildingSet>();
     public List<ItemSet> patternItem = new List<ItemSet>();
