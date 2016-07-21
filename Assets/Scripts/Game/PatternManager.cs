@@ -229,12 +229,14 @@ public class PatternManager : MonoBehaviour
         }
     }
 
-    void AddItem(Vector3 pos)
+    void AddCoin(Vector3 pos)
     {
-        print("添加物品");
-
-
-
+        if (this.coin_Pref != null)
+        {
+            GameObject coin = Instantiate<GameObject>(this.coin_Pref);
+            pos.y = 0.2f;
+            coin.transform.position = pos;
+        }
     }
 
     /*IEnumerator CalAmountItem()
