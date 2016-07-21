@@ -14,6 +14,8 @@ public static class GlobalDefine
     public static float floorPosInterval = 32;//地块间隔距离
     public static float defaultBuildingInterval = 4;//建筑间隔距离(z轴向)
 
+    public static int itemNumPerFloor = 12;//每个地块可放置的道具数量
+
     public static void SetImageColorAlpha(Image image, float a)
     {
         Color color = image.color;

@@ -213,7 +213,17 @@ public class PatternManager : MonoBehaviour
             //右
             Vector3 rightBuildingPos = new Vector3(3, 0, 4 + startZPos + GlobalDefine.defaultBuildingInterval * i);
             GameObject rightBuilding = AddRightBuilding(rightBuildingPos);
-            rightBuilding.transform.parent = floor.transform;
+            rightBuilding.transform.parent = floor.transform;        
+        }
+
+        //添加道具
+        float itemInterval = GlobalDefine.floorPosInterval / GlobalDefine.itemNumPerFloor;
+        for (int i = 0; i < GlobalDefine.itemNumPerFloor; i++)
+        {
+            //------------之后要改为生成多种道具。目前只生成硬币
+            Vector3 itemPos = pos;
+            itemPos.z += i * itemInterval;
+            AddCoin(floor, itemPos);
         }
 
         //添加检测
@@ -228,15 +238,30 @@ public class PatternManager : MonoBehaviour
             this.currentColliderCheck = this.currentSpawnObj.GetComponentInChildren<ColliderCheck>();
         }
     }
-
-    void AddCoin(Vector3 pos)
+    //添加硬币
+    GameObject AddCoin(Vector3 pos)
     {
         if (this.coin_Pref != null)
         {
             GameObject coin = Instantiate<GameObject>(this.coin_Pref);
             pos.y = 0.2f;
             coin.transform.position = pos;
+            return coin;
         }
+        else
+        {
+            return null;
+        }
+    }
+
+    GameObject AddCoin(GameObject floor, Vector3 pos)
+    {
+        GameObject coin = AddCoin(pos);
+        if (coin != null)
+        {
+            coin.transform.parent = floor.transform;
+        }
+        return coin;
     }
 
     /*IEnumerator CalAmountItem()
