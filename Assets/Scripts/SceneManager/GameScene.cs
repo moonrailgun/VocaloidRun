@@ -6,6 +6,7 @@ public class GameScene : MonoBehaviour {
     public float currentSpeed;
     public float currentLife = 1;
     public float currentDistance = 0;
+    public int currentCoin = 0;
 
     public GameObject player;
 
@@ -20,10 +21,14 @@ public class GameScene : MonoBehaviour {
 
     private float distanceCheck = 0;
 
+    public static GameScene instance;
+
 	// Use this for initialization
 	void Start () {
         this.currentLife = GlobalDefine.startLife;
         this.currentSpeed = GlobalDefine.startSpeed;
+
+        instance = this;
 
         //this.pausePanel.SetActive(false);
         //this.pauseButton.SetActive(true);
@@ -67,7 +72,6 @@ public class GameScene : MonoBehaviour {
                 if (distanceCheck >= GlobalDefine.addSpeedEveryDistance)
                 {
                     //增加速度
-
                     currentSpeed += GlobalDefine.addedSpeed;
                     if (currentSpeed >= GlobalDefine.maxSpeed)
                     {
@@ -87,5 +91,10 @@ public class GameScene : MonoBehaviour {
 
         this.pausePanel.SetActive(true);
         this.pauseButton.SetActive(false);
+    }
+
+    public void AddCoin()
+    {
+        this.currentCoin++;
     }
 }

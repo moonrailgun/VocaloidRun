@@ -44,7 +44,11 @@ public class PlayerController : MonoBehaviour
     {
         if (col.tag == "Item")
         {
-            Debug.Log("碰到道具");
+            GameItem item = col.GetComponent<GameItem>();
+            if (item != null)
+            {
+                item.OnHit();
+            }
         }
     }
 
