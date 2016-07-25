@@ -19,6 +19,10 @@ public class GameScene : MonoBehaviour {
     public bool isRoll = false;
     public int countAddSpeed;//速度增加次数
 
+    //UI
+    public Text UIDistance;
+    public Text UICoin;
+
     private float distanceCheck = 0;
 
     public static GameScene instance;
@@ -38,7 +42,7 @@ public class GameScene : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        UpdateUI();
 	}
     // 游戏开始
     void GameStart()
@@ -46,6 +50,15 @@ public class GameScene : MonoBehaviour {
         Debug.Log("Game Start");
 
         this.LoadPlayer();
+    }
+
+    private void UpdateUI()
+    {
+        if (this.UICoin != null && this.UIDistance != null)
+        {
+            this.UICoin.text = this.currentCoin.ToString();
+            this.UIDistance.text = Mathf.FloorToInt(this.currentDistance).ToString();
+        }
     }
 
     //加载玩家
@@ -59,6 +72,8 @@ public class GameScene : MonoBehaviour {
 
         StartCoroutine(UpdatePerDistance());
     }
+
+
 
     //速度检测
     IEnumerator UpdatePerDistance()
@@ -81,6 +96,7 @@ public class GameScene : MonoBehaviour {
                     distanceCheck = 0;
                 }
             }
+
             yield return 0;
         }
     }
