@@ -218,6 +218,7 @@ public class PatternManager : MonoBehaviour
 
         //添加道具
         float itemInterval = GlobalDefine.floorPosInterval / GlobalDefine.itemNumPerFloor;
+        int lastCoinPos = 0;//-1,0,1
         for (int i = 0; i < GlobalDefine.itemNumPerFloor; i++)
         {
             //------------之后要改为生成多种道具。目前只生成硬币
@@ -225,8 +226,17 @@ public class PatternManager : MonoBehaviour
             itemPos.z += i * itemInterval;
 
             //随机左右
-            int randomNum = Mathf.FloorToInt(Random.Range(0, 3) - 1);//-1,0,1
-            itemPos.x = randomNum * 1.8f;
+            float rand = Random.value;
+            if (rand > 0.8)
+            {
+                int randomPosNum = Mathf.FloorToInt(Random.Range(0, 3) - 1);//-1,0,1
+                if (lastCoinPos + randomPosNum == 0)
+                {
+                    randomPosNum = 0;
+                }
+                lastCoinPos = randomPosNum;
+            }
+            itemPos.x = lastCoinPos * 1.8f;
 
             AddCoin(floor, itemPos);
         }
